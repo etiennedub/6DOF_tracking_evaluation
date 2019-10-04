@@ -22,10 +22,15 @@ class Camera:
         self.height = int(size[1])
         self.distortion = distortion
 
-    def project_points(self, points, round=True):
+    def project_points(self, points, round=True, y_negative=False):
+        # Note: By default center_y is in positive convention.
+        # Set y_negatif to True if your y axis is in negative convention.
+        center_y = self.center_y
+        if y_negative:
+            center_y = self.height - self.center_y
         computed_pixels = np.zeros((points.shape[0], 2))
         computed_pixels[:, 1] = points[:, 0] * self.focal_x / points[:, 2] + self.center_x
-        computed_pixels[:, 0] = points[:, 1] * self.focal_y / points[:, 2] + self.center_y
+        computed_pixels[:, 0] = points[:, 1] * self.focal_y / points[:, 2] + center_y
         if round:
             computed_pixels = np.round(computed_pixels).astype(np.int)
         return computed_pixels

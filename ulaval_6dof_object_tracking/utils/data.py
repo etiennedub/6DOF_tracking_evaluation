@@ -91,7 +91,8 @@ def compute_2Dboundingbox(pose, camera, scale_size=230, scale=(1, 1, 1)):
     points[1] = [obj_x - offset, obj_y + offset, obj_z]     # top right
     points[2] = [obj_x + offset, obj_y - offset, obj_z]     # bottom left
     points[3] = [obj_x + offset, obj_y + offset, obj_z]     # bottom right
-    return camera.project_points(points).astype(np.int32)
+    y_negative = scale[1] < 0
+    return camera.project_points(points, y_negative=y_negative).astype(np.int32)
 
 
 def project_center(pose, camera, scale=(1, 1, 1)):
